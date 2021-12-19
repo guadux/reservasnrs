@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Butaca;
 use App\Models\Reserva;
+use App\Models\ReservaTieneButacas;
 use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ReservaController extends Controller
 {
@@ -14,7 +19,16 @@ class ReservaController extends Controller
      */
     public function index()
     {
-        //
+        $reservas = Reserva::where("id_usuario","=",Auth::user()->id)->get();
+        return view("reservas.index", compact('reservas'));
+    }
+
+    public function indexGrilla()
+    {
+        
+        $asientos = Butaca::reservasUsers();
+        return view("reservas.index_grilla", compact( 'asientos'));
+        
     }
 
     /**
@@ -24,7 +38,8 @@ class ReservaController extends Controller
      */
     public function create()
     {
-        //
+        $asientos = Butaca::orderBy("fila", "asc")->orderBy("columna","asc")->get();
+        return view("reservas.create", compact('asientos'));
     }
 
     /**
@@ -35,7 +50,37 @@ class ReservaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $id_usr = Auth::user()->id;
+        $datos = $request->except('_token', 'personas');
+        
+        $reserva = new Reserva();
+        $reserva->id_usuario = $id_usr;
+        $reserva->personas = $request['personas'];
+        $reserva->save();
+
+        $id_reserva = $reserva->id;
+
+        foreach ($datos as $d=>$e){
+            
+            //actualizo la butaca como ocupada
+            $fila = substr($d, 0, 1);
+            $columna = substr($d, 1, 1);
+            $butaca = Butaca::where("fila","=",$fila)->where("nombre_columna","=",$columna)->first();
+            $butaca->update(array('ocupada' => 1));
+
+            //asigno la butaca a la reserva
+            ReservaTieneButacas::create(array('id_reserva' => $id_reserva, "id_butaca"=> $butaca->id));
+
+            
+
+        }
+
+        //Guardo en el log que se realizo una reserva
+        Log::channel('reservas')
+        ->info('Reserva ejecutada del usuario '.$id_usr.". Cantidad de butacas: ".$request['personas'].
+        '. Id de la reserva: '.$id_reserva);
+
+        return redirect("reservas");
     }
 
     /**
@@ -55,9 +100,10 @@ class ReservaController extends Controller
      * @param  \App\Models\Reserva  $reserva
      * @return \Illuminate\Http\Response
      */
-    public function edit(Reserva $reserva)
+    public function edit($id_reserva)
     {
-        //
+        $asientos = Butaca::reservasUsers();
+        return view("reservas.edit", compact('asientos','id_reserva'));
     }
 
     /**
@@ -69,7 +115,51 @@ class ReservaController extends Controller
      */
     public function update(Request $request, Reserva $reserva)
     {
-        //
+        $id_usr = Auth::user()->id;
+        $datos = $request->except('_token', 'personas', 'id_reserva', '_method');
+
+        $id_reserva = $request['id_reserva'];
+        $personas = $request['personas'];
+
+        Reserva::where('id', $id_reserva)
+            ->update(['personas' => $personas]);
+
+        //elimino todos los datos de la reserva
+        $this->deleteDatos($id_reserva);
+
+        foreach ($datos as $d=>$e){
+            
+            //actualizo la butaca como ocupada
+            $fila = substr($d, 0, 1);
+            $columna = substr($d, 1, 1);
+            $butaca = Butaca::where("fila","=",$fila)->where("nombre_columna","=",$columna)->first();
+            $butaca->update(array('ocupada' => 1));
+
+            //asigno la butaca a la reserva
+            ReservaTieneButacas::create(array('id_reserva' => $id_reserva, "id_butaca"=> $butaca->id));
+
+            
+
+        }
+
+        //Guardo en el log que se realizo una reserva
+        Log::channel('reservas')
+        ->info('Reserva actualizada del usuario '.$id_usr.". Cantidad de butacas: ".$request['personas'].
+        '. Id de la reserva: '.$id_reserva);
+
+        return redirect("reservas");
+    }
+
+    public function deleteDatos($id_reserva){
+        $reserva = Reserva::find($id_reserva);
+        $butacas_reservadas = ReservaTieneButacas::where("id_reserva","=",$id_reserva)->get();
+
+        foreach ($butacas_reservadas as $butaca_r){
+            //libero las butaca
+            Butaca::where("id","=",$butaca_r->id_butaca)->update(['ocupada' => 0]);
+            //elimino la butaca de la reserva
+            ReservaTieneButacas::destroy($butaca_r->id);
+        }
     }
 
     /**
@@ -78,8 +168,13 @@ class ReservaController extends Controller
      * @param  \App\Models\Reserva  $reserva
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Reserva $reserva)
+    public function destroy($id_reserva)
     {
-        //
+        
+        $this->deleteDatos($id_reserva);
+
+        //elimino la reserva
+        Reserva::destroy($id_reserva);
+        return redirect('reservas/index')->with('mensaje','Reserva eliminada con éxito');
     }
 }

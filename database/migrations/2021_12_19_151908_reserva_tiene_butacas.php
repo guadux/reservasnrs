@@ -13,14 +13,14 @@ class ReservaTieneButacas extends Migration
      */
     public function up()
     {
-        Schema::create('reserva_tiene_butaca', function (Blueprint $table) {
+        Schema::create('reserva_tiene_butacas', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger("id_reserva");
-            $table->bigInteger("id_asiento");
+            $table->bigInteger("id_butaca");
             $table->timestamps();
 
             $table->foreign("id_reserva")->references("id")->on("reservas");
-            $table->foreign("id_asiento")->references("id")->on("butacas");
+            $table->foreign("id_butaca")->references("id")->on("butacas");
         });
     }
 

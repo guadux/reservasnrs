@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+                <div class="card-header">{{ __('Bienvenidx!') }}</div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -14,8 +14,15 @@
                         </div>
                     @endif
 
-                    {{ __('You are logged in!') }}
+                    {{ __('Ya podés elegir tus asientos!') }}
                 </div>
+                <div class="card-body">
+                    <div class="panel-body">
+                      Acceso para administradores del sitio
+                      <a class="" href="{{route('admin.index')}}">ACCEDER</a>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

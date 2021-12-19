@@ -18,7 +18,7 @@ class Butacas extends Migration
             $table->integer("fila");
             $table->integer("columna");
             $table->char("nombre_columna");
-            $table->boolean("ocupado")->default(0);
+            $table->boolean("ocupada")->default(0);
             $table->timestamps();
         });
     }
