@@ -19,37 +19,9 @@
     
 </div>
 
-<script>
-   
-   $(".check").click(function() {
-        id = $(this).attr("id");
-        label_class = $("#label-"+id).attr("class");
-        // alert(label_class);
-        if (label_class=="btn-warning"){
-            $("#label-"+id).removeClass("btn-warning").addClass("btn-success");
-            $("#"+id).attr("checked", true);
-        }
-        else{
-            $("#label-"+id).removeClass("btn-success").addClass("btn-warning");
-            $("#"+id).attr("checked", false);
-        }
-        
-    });
 
-   $("#reservar").submit(function(event) {
-        // event.preventDefault();
-        var numberOfChecked = $('input:checkbox:checked').length;
-        var personas = $('#personas').val();
-        if (numberOfChecked==personas)
-            return true;
-            
-        else{
-            alert("La cantidad de butacas seleccionadas no coincide con la cantidad de personas");
-            return false;
-        }
-    });
+@endsection
 
-
-
-</script>
+@section('scripts')
+	<script src="{{ asset('js/teatro.js') }}"></script>
 @endsection

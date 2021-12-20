@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    {{ __('Ya podés elegir tus asientos!') }}
+                    {{ __('Ya podés elegir tus butacas!') }}
                 </div>
                 <div class="card-body">
                     <div class="panel-body">

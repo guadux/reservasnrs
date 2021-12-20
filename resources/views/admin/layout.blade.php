@@ -68,9 +68,9 @@
                                     <a class="dropdown-item" href="{{ route('home') }}">
                                         Inicio Teatro
                                     </a>
-                                    <a class="dropdown-item" href="{{ route('admin.index') }}">
+                                    <!--<a class="dropdown-item" href="{{ route('admin.index') }}">
                                         Panel de Control
-                                    </a>
+                                    </a>-->
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -92,5 +92,6 @@
             @yield('content')
         </main>
     </div>
+    @yield('scripts')
 </body>
 </html>

@@ -37,7 +37,7 @@ Route::group(['middleware' => ['admin']], function () {
     Route::get('admin', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.index');
     Route::get('admin/reservas', [App\Http\Controllers\AdminController::class, 'reservas'])->name('admin.reservas');
     Route::get('admin/reservas/log', [App\Http\Controllers\AdminController::class, 'log'])->name('admin.reservas.log');
-    Route::post('admin/reservas/view', [App\Http\Controllers\AdminController::class, 'verReserva'])->name('admin.reservas.view');
+    Route::get('admin/reservas/view', [App\Http\Controllers\AdminController::class, 'verReserva'])->name('admin.reservas.view');
     Route::resource('admin/users', UserController::class);
     // Route::resource('admin/asiento', AsientoController::class);
 });

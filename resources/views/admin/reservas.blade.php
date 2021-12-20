@@ -79,34 +79,6 @@
     
 </div>
 
-<script>
-		$(".ver-reserva").on("click", function(){
-			var id_reserva = $(this).attr('id');
-			
-			var parametros = {
-                "_token": "{{csrf_token()}}",
-				"id_reserva" : id_reserva,
-                
-			};
-			$.ajax({
-				data: parametros,
-				dataType: 'JSON',
-                method: "POST",
-				url: " {{ route('admin.reservas.view') }}",
-				success: function(response){
-					$("#modal-body").html(response.html);
-					
-					//alert(response);
-					//JSON.parse(response);
-					//alert(response.html);
-
-				}
-			});
-			
-		});
-		</script>
-
-
 <!-- Modal -->
 <div class="modal fade" id="seatModal" tabindex="-1" aria-labelledby="seatModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -126,4 +98,8 @@
   </div>
 </div>
 
+@endsection
+
+@section('scripts')
+	<script src="{{ asset('js/admin.js') }}"></script>
 @endsection

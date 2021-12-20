@@ -12,7 +12,6 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon"> 
 
     <!-- Scripts -->
-    <!--<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>-->
     <script src="{{ asset('js/app.js') }}"></script>
 
     <!-- Fonts -->
@@ -65,11 +64,11 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('home') }}">
+                                    <!--<a class="dropdown-item" href="{{ route('home') }}">
                                         Inicio Teatro
-                                    </a>
+                                    </a>-->
                                     <a class="dropdown-item" href="{{ route('admin.index') }}">
-                                        Panel de Control
+                                        <i class="fa fa-user"></i> Panel de Control
                                     </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
@@ -92,5 +91,6 @@
             @yield('content')
         </main>
     </div>
+    @yield('scripts')
 </body>
 </html>

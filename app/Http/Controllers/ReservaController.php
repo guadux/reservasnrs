@@ -166,6 +166,11 @@ class ReservaController extends Controller
 
         //elimino la reserva
         Reserva::destroy($id_reserva);
+
+        //Guardo en el log que se realizo una cancelacion
+        Log::channel('reservas')
+        ->info('Reserva cancelada: '.$id_reserva);
+
         return redirect('reservas')->with('mensaje','Reserva eliminada con éxito');
     }
 }
