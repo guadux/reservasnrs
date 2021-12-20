@@ -27,5 +27,16 @@ class Reserva extends Model
 
     }
 
+    public static function deleteDatos($id_reserva){
+        $reserva = static::find($id_reserva);
+        $butacas_reservadas = ReservaTieneButacas::where("id_reserva","=",$id_reserva)->get();
+
+        foreach ($butacas_reservadas as $butaca_r){
+            //libero las butaca
+            Butaca::where("id","=",$butaca_r->id_butaca)->update(['ocupada' => 0]);
+            //elimino la butaca de la reserva
+            ReservaTieneButacas::destroy($butaca_r->id);
+        }
+    }
     
 }

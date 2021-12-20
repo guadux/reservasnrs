@@ -113,6 +113,16 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+        'reservas' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/reservas.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'formatter' => Monolog\Formatter\LineFormatter::class,
+            'formatter_with' => [
+                'format' => "[%datetime%] %message%\n",
+                'dateFormat' => 'Y-m-d H:i:s.v',
+            ],
+        ],
     ],
 
 ];

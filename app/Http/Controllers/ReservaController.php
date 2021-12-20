@@ -103,7 +103,8 @@ class ReservaController extends Controller
     public function edit($id_reserva)
     {
         $asientos = Butaca::reservasUsers();
-        return view("reservas.edit", compact('asientos','id_reserva'));
+        $reserva = Reserva::find($id_reserva);
+        return view("reservas.edit", compact('asientos','id_reserva','reserva'));
     }
 
     /**
@@ -125,7 +126,8 @@ class ReservaController extends Controller
             ->update(['personas' => $personas]);
 
         //elimino todos los datos de la reserva
-        $this->deleteDatos($id_reserva);
+        // $this->deleteDatos($id_reserva);
+        Reserva::deleteDatos($id_reserva);
 
         foreach ($datos as $d=>$e){
             
@@ -150,17 +152,6 @@ class ReservaController extends Controller
         return redirect("reservas");
     }
 
-    public function deleteDatos($id_reserva){
-        $reserva = Reserva::find($id_reserva);
-        $butacas_reservadas = ReservaTieneButacas::where("id_reserva","=",$id_reserva)->get();
-
-        foreach ($butacas_reservadas as $butaca_r){
-            //libero las butaca
-            Butaca::where("id","=",$butaca_r->id_butaca)->update(['ocupada' => 0]);
-            //elimino la butaca de la reserva
-            ReservaTieneButacas::destroy($butaca_r->id);
-        }
-    }
 
     /**
      * Remove the specified resource from storage.
@@ -171,10 +162,10 @@ class ReservaController extends Controller
     public function destroy($id_reserva)
     {
         
-        $this->deleteDatos($id_reserva);
+        Reserva::deleteDatos($id_reserva);
 
         //elimino la reserva
         Reserva::destroy($id_reserva);
-        return redirect('reservas/index')->with('mensaje','Reserva eliminada con éxito');
+        return redirect('reservas')->with('mensaje','Reserva eliminada con éxito');
     }
 }

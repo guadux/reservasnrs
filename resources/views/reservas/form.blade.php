@@ -60,7 +60,7 @@
             <div class="col-8">
             @if ($modo =="reservar" or $modo=="editar")
             <label>Personas: </label>
-            <input type="number" min="1" max="10" step="1" name="personas" id="personas" value="1">
+            <input type="number" min="1" max="10" step="1" name="personas" id="personas" value="{{ isset($reserva->personas) ? $reserva->personas:1 }}">
             <input type="submit" value="{{ ucfirst($modo)}}" class="btn btn-primary" >
             @endif
             </div>

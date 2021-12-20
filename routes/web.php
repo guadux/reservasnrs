@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,7 +28,6 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::group(['middleware' => 'auth'], function(){
     
-    // Route::get('reservar', [UserTieneAsientosController::class, 'create'])->name('reservar');
     Route::get('reservas/grilla', [ReservaController::class, 'indexGrilla'])->name('indexGrilla');
     Route::resource('reservas', ReservaController::class);
     
@@ -35,8 +35,8 @@ Route::group(['middleware' => 'auth'], function(){
 
 Route::group(['middleware' => ['admin']], function () {
     Route::get('admin', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.index');
-    // Route::get('admin/reservas', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.reservas');
-    // Route::get('admin/reservas/log', [App\Http\Controllers\AdminController::class, 'log'])->name('admin.reservas.log');
-    // Route::resource('admin/users', UserController::class);
+    Route::get('admin/reservas', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.reservas');
+    Route::get('admin/reservas/log', [App\Http\Controllers\AdminController::class, 'log'])->name('admin.reservas.log');
+    Route::resource('admin/users', UserController::class);
     // Route::resource('admin/asiento', AsientoController::class);
 });
